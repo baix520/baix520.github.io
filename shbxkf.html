@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>卡密售后 | 客服中心</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{
+            font-family:微软雅黑,sans-serif;
+            background:#0b0c18;
+            color:#e5e7eb;
+            padding:15px;
+            min-height:100vh;
+        }
+        .wrap{max-width:100%;margin:0 auto;}
+        .title{
+            text-align:center;
+            padding:20px 0;
+        }
+        .title h1{
+            font-size:22px;
+            color:#60a5fa;
+            margin-bottom:6px;
+        }
+        .title p{font-size:13px;color:#9ca3af;}
+
+        .box{
+            background:rgba(30,41,59,0.6);
+            border-radius:14px;
+            padding:18px;
+            margin-bottom:16px;
+            border:1px solid rgba(96,165,250,0.2);
+        }
+        .box h3{
+            color:#60a5fa;
+            font-size:16px;
+            margin-bottom:12px;
+        }
+        .box p{
+            font-size:14px;
+            line-height:1.7;
+            color:#d1d5db;
+        }
+
+        input{
+            width:100%;
+            height:48px;
+            background:#1f2937;
+            border:1px solid #374151;
+            border-radius:10px;
+            color:#fff;
+            padding:0 14px;
+            font-size:15px;
+            margin:8px 0 14px;
+        }
+        .btn{
+            width:100%;
+            height:50px;
+            border:none;
+            border-radius:10px;
+            background:#2563eb;
+            color:#fff;
+            font-size:16px;
+            font-weight:bold;
+        }
+        .btn:active{background:#1d4ed8;}
+
+        .link-item{
+            display:block;
+            background:#1f2937;
+            text-align:center;
+            line-height:46px;
+            border-radius:10px;
+            color:#60a5fa;
+            text-decoration:none;
+            font-size:15px;
+            margin-bottom:10px;
+        }
+
+        .res{
+            margin-top:12px;
+            padding:12px;
+            border-radius:10px;
+            font-size:14px;
+            display:none;
+        }
+        .ok{background:rgba(16,185,129,0.15);border:1px solid #10b981;color:#10b981;}
+        .err{background:rgba(239,68,68,0.15);border:1px solid #ef4444;color:#ef4444;}
+
+        .foot{
+            text-align:center;
+            font-size:12px;
+            color:#6b7280;
+            margin-top:30px;
+        }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="title">
+        <h1>售后客服中心</h1>
+        <p>卡密查询 · 问题反馈 · 全天售后</p>
+    </div>
+
+    <div class="box">
+        <h3>📢 售后规则</h3>
+        <p>1.卡密售出不退换，遇失效直接找客服<br>
+        2.禁止倒卖、共享卡密，违规拉黑处理<br>
+        3.售后处理时间：全天在线回复</p>
+    </div>
+
+    <div class="box">
+        <h3>🔑 卡密查询/反馈</h3>
+        <input type="text" id="km" placeholder="请输入卡密">
+        <input type="text" id="dd" placeholder="订单号（选填）">
+        <button class="btn" onclick="sendEmail()">提交给客服</button>
+        <div class="res" id="resBox"></div>
+    </div>
+
+    <div class="box">
+        <h3>📞 联系我们</h3>
+        <a href="tencent://message/?uin=2487673184&Site=&Menu=yes" class="link-item">💬 点击联系QQ客服</a>
+        <a href="https://jq.qq.com/?_wv=1027&k=替换成你的群链接" class="link-item">👥 加入售后交流群</a>
+    </div>
+
+    <div class="foot">
+        © 2025 售后专用页 | 移动端适配版
+    </div>
+</div>
+
+<script>
+function sendEmail(){
+    let km = document.getElementById("km").value.trim();
+    let dd = document.getElementById("dd").value.trim();
+    let box = document.getElementById("resBox");
+
+    if(!km){
+        box.className="res err";
+        box.style.display="block";
+        box.innerText="⚠️ 请输入卡密";
+        return;
+    }
+
+    // 邮件内容
+    let subject = encodeURIComponent("卡密售后反馈");
+    let body = encodeURIComponent("卡密：" + km + "\n订单号：" + (dd || "未填写") + "\n用户反馈：请在此补充你的问题");
+    let mailtoLink = "mailto:2487673184@qq.com?subject=" + subject + "&body=" + body;
+
+    // 打开邮件客户端
+    window.location.href = mailtoLink;
+
+    // 提示用户
+    box.className="res ok";
+    box.style.display="block";
+    box.innerText="✅ 已唤起邮件客户端，请发送邮件给客服";
+}
+</script>
+</body>
+</html>
