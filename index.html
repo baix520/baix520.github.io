@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HACK SYSTEM 白熊网页端</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: #000;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* ========== 全屏代码雨 铺满整个手机屏幕 ========== */
+        #codeRain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            opacity: 0.4;
+        }
+
+        /* ========== 页面容器 直接全屏铺满手机 ========== */
+        .page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 6vh 8vw;
+            z-index: 10;
+            animation: pageIn 0.4s ease;
+        }
+        #page1 {display: flex;}
+        @keyframes pageIn {
+            from{opacity:0;transform:scale(0.95);}
+            to{opacity:1;transform:scale(1);}
+        }
+
+        /* ========== 全屏霓虹框！直接撑满手机屏幕 ========== */
+        .neon-box {
+            width: 100%;
+            height: 100%;
+            border: 5px solid;
+            border-image: linear-gradient(135deg, #00e5ff, #ff33ee) 1;
+            border-radius: 15px;
+            padding: 8vh 6vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 35px;
+            box-shadow: 0 0 30px #00e5ff70, 0 0 50px #ff33ee60;
+            background-color: rgba(5,5,10,0.92);
+        }
+
+        /* 标题统一收紧字号，绝不溢出屏幕 */
+        .title-neon {
+            font-size: 2.2rem;
+            color: #00e5ff;
+            text-align: center;
+            width: 100%;
+            text-shadow: 0 0 15px #00e5ff, 0 0 35px #00e5ff;
+            animation: glow 3s infinite alternate ease;
+        }
+
+        .title-purple {
+            font-size: 2.4rem;
+            line-height: 1.35;
+            color: #ff33ee;
+            text-align: center;
+            width: 100%;
+            text-shadow: 0 0 15px #ff33ee, 0 0 40px #ff33ee;
+            animation: glowPur 3s infinite alternate ease;
+        }
+
+        .title-success {
+            font-size: 2.3rem;
+            color: #00e5ff;
+            text-align: center;
+            text-shadow: 0 0 20px #00e5ff, 0 0 45px #00e5ff;
+            animation: glow 2.5s infinite alternate ease;
+        }
+
+        .title-console {
+            font-size: 2.4rem;
+            line-height: 1.35;
+            color: #00e5ff;
+            text-align: center;
+            width: 100%;
+            text-shadow: 0 0 15px #00e5ff, 0 0 40px #00e5ff;
+            animation: glow 3s infinite alternate ease;
+        }
+
+        @keyframes glow {from{filter:brightness(1);}to{filter:brightness(1.4);}}
+        @keyframes glowPur {from{filter:brightness(1);}to{filter:brightness(1.45);}}
+
+        /* 输入框 */
+        .input-box {
+            width: 85%;
+            padding: 16px;
+            border: 3px solid #00e5ff;
+            border-radius: 12px;
+            background: #080812;
+            color: #fff;
+            font-size: 1.15rem;
+            text-align: center;
+            outline: none;
+            box-shadow: 0 0 18px #00e5ff50;
+            inputmode: numeric;
+        }
+        .tip-text {color:#aaa;font-size:0.95rem;}
+
+        /* 渐变按钮 */
+        .btn-gradient {
+            width: 85%;
+            padding: 15px 0;
+            border: none;
+            border-radius: 999px;
+            font-size: 1.2rem;
+            color:#fff;
+            background: linear-gradient(90deg,#00e5ff,#ff33ee);
+            box-shadow: 0 0 20px #00e5ff60;
+            transition: 0.25s;
+        }
+        .btn-gradient:active{transform:scale(0.95);}
+
+        /* 返回按钮 */
+        .btn-gray {
+            padding: 12px 40px;
+            border: none;
+            border-radius: 12px;
+            background:#181825;
+            color:#ccc;
+            font-size:1rem;
+            transition:0.2s;
+        }
+        .btn-gray:active{transform:scale(0.96);background:#282838;}
+
+        /* 四宫格 */
+        .console-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            width: 88%;
+        }
+        .console-card {
+            aspect-ratio:1/1;
+            border:3px solid #00e5ff;
+            border-radius:16px;
+            background:#080812;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            gap:12px;
+            transition:0.25s;
+        }
+        .console-card:active{transform:scale(0.94);box-shadow:0 0 25px #00e5ff;}
+        .console-icon{font-size:2.6rem;color:#00e5ff;}
+        .console-text{font-size:1rem;color:#00e5ff;text-align:center;}
+    </style>
+</head>
+<body>
+<!-- 全屏铺满手机的黑客代码雨背景 -->
+<canvas id="codeRain"></canvas>
+
+<!-- 1.首页 -->
+<div class="page" id="page1">
+    <div class="neon-box">
+        <div class="title-neon">白熊
+        NEXT</div>
+        <button class="btn-gradient" onclick="goPage(2)">进入系统授权</button>
+    </div>
+</div>
+
+<!-- 2.授权登录页 -->
+<div class="page" id="page2">
+    <div class="neon-box">
+        <div class="title-purple">
+            欢迎<br>点击下方登陆
+        </div>
+        <input class="input-box" id="code" placeholder="请输入授权码" value="123456">
+        <div class="tip-text">默认卡密：123456</div>
+        <button class="btn-gradient" onclick="check()">验证登录</button>
+        <button class="btn-gray" onclick="goPage(1)">返回主页</button>
+    </div>
+</div>
+
+<!-- 3.成功页 -->
+<div class="page" id="page3">
+    <div class="neon-box">
+        <div class="title-success">功能页面</div>
+        <button class="btn-gradient" onclick="goPage(4)">进入功能面板</button>
+        <button class="btn-gray" onclick="goPage(1)">返回主页</button>
+    </div>
+</div>
+
+<!-- 4.控制台 -->
+<div class="page" id="page4">
+    <div class="neon-box">
+        <div class="title-console">
+            白熊祝你<br>天天开心
+        </div>
+        <div class="console-grid">
+            <div class="console-card"><div class="console-icon">⚡</div><div class="console-text">性能模式</div></div>
+            <div class="console-card"><div class="console-icon">🔍</div><div class="console-text">内存检查</div></div>
+            <div class="console-card"><div class="console-icon">🛡️</div><div class="console-text">登陆保护</div></div>
+            <div class="console-card"><div class="console-icon">⚙️</div><div class="console-text">st设置</div></div>
+        </div>
+        <button class="btn-gray" onclick="goPage(1)">返回主页</button>
+    </div>
+</div>
+
+<script>
+//页面切换
+function goPage(n){
+    document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+    const el = document.getElementById('page'+n);
+    el.style.display='flex';
+    el.style.animation='none';el.offsetWidth;
+    el.style.animation='pageIn 0.4s ease';
+}
+
+//卡密验证
+const key='123456';
+function check(){
+    if(document.getElementById('code').value.trim()===key)goPage(3);
+    else alert('授权码错误');
+}
+
+// 全屏流动代码雨 铺满整个手机屏幕
+const cvs=document.getElementById('codeRain');
+const ctx=cvs.getContext('2d');
+cvs.width=innerWidth;cvs.height=innerHeight;
+
+const str='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%^&*()';
+const size=14;
+const col=Math.floor(cvs.width/size);
+const arr=new Array(col).fill(Math.random()*cvs.height);
+
+function draw(){
+    ctx.fillStyle='rgba(0,0,0,0.055)';
+    ctx.fillRect(0,0,cvs.width,cvs.height);
+    for(let i=0;i<col;i++){
+        const c=str[Math.random()*str.length|0];
+        const h=(180+i*2)%360;
+        ctx.fillStyle=`hsla(${h},100%,55%,0.5)`;
+        ctx.font=size+'px monospace';
+        ctx.fillText(c,i*size,arr[i]*size);
+        if(arr[i]*size>cvs.height&&Math.random()>0.97)arr[i]=0;
+        arr[i]++;
+    }
+}
+setInterval(draw,35);
+
+window.addEventListener('resize',()=>{
+    cvs.width=innerWidth;cvs.height=innerHeight;
+});
+</script>
+</body>
+</html>
